@@ -1,0 +1,12 @@
+[project]
+name = "iceberg-openaq"
+version = "0.1.0"
+description = "Basic ingestion pipeline to consume OpenAQ data and store it in Iceberg"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.2.3",
+    "pyarrow>=19.0.0",
+    "pyiceberg>=0.8.1",
+    "requests>=2.32.3",
+]
