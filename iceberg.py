@@ -1,6 +1,4 @@
 import os
-import json
-import pandas as pd
 from pathlib import Path
 import pyarrow as pa
 import pyarrow.dataset as ds
@@ -14,7 +12,9 @@ from pyiceberg.types import (
     TimestampType,
 )
 import pyiceberg.transforms as transforms
+
 from config import CATALOG_CONFIG, logger
+from transform import transform_measurements, transform_locations
 
 
 def setup_iceberg_catalog():
@@ -164,61 +164,6 @@ def write_to_iceberg(df, table_identifier, catalog):
 
     logger.info(f"Successfully wrote {len(df)} records to {table_identifier}")
 
-
-def transform_measurements(measurements_data):
-    """
-    Transform raw measurements data into a pandas DataFrame.
-
-    Args:
-        measurements_data (list): Raw measurements data from OpenAQ API
-
-    Returns:
-        pandas.DataFrame: Transformed measurements data
-    """
-    df = pd.DataFrame(measurements_data)
-    
-    # Convert timestamp columns to datetime
-    if 'date' in df.columns:
-        df['timestamp_utc'] = pd.to_datetime(df['date'].apply(lambda x: x.get('utc')))
-        df['timestamp_local'] = pd.to_datetime(df['date'].apply(lambda x: x.get('local')))
-        df = df.drop('date', axis=1)
-
-    # Extract coordinates
-    if 'coordinates' in df.columns:
-        df['latitude'] = df['coordinates'].apply(lambda x: x.get('latitude') if x else None)
-        df['longitude'] = df['coordinates'].apply(lambda x: x.get('longitude') if x else None)
-        df = df.drop('coordinates', axis=1)
-
-    return df
-
-def transform_locations(locations_data):
-    """
-    Transform raw locations data into a pandas DataFrame.
-
-    Args:
-        locations_data (list): Raw locations data from OpenAQ API
-
-    Returns:
-        pandas.DataFrame: Transformed locations data
-    """
-    df = pd.DataFrame(locations_data)
-    
-    # Convert timestamp columns to datetime
-    if 'firstUpdated' in df.columns:
-        df['first_updated'] = pd.to_datetime(df['firstUpdated'])
-        df = df.drop('firstUpdated', axis=1)
-    if 'lastUpdated' in df.columns:
-        df['last_updated'] = pd.to_datetime(df['lastUpdated'])
-        df = df.drop('lastUpdated', axis=1)
-
-    # Convert list/dict columns to strings
-    for col in ['parameters', 'sources', 'countsByMeasurement', 'countsByDay']:
-        if col in df.columns:
-            df[col.lower()] = df[col].apply(json.dumps)
-            if col != col.lower():
-                df = df.drop(col, axis=1)
-
-    return df
 
 def write_measurements(measurements_data, catalog):
     """
