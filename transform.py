@@ -1,3 +1,6 @@
+import json
+import pandas as pd
+
 def transform_measurements(measurements):
     """
     Transform raw measurements data into a clean format for Iceberg.
