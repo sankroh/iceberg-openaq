@@ -7,7 +7,7 @@ from iceberg import (
     write_measurements,
 )
 
-from config import configure_logging
+from config import configure_logging, DATA_DIR
 
 # Set up logging
 logger = configure_logging()
@@ -17,6 +17,10 @@ def main():
     """
     Main function to run the OpenAQ to Iceberg pipeline.
     """
+
+    # Make sure DATA_DIR exists.
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
     logger.info("Starting OpenAQ to Iceberg pipeline")
 
     try:
