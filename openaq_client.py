@@ -1,3 +1,4 @@
+from config import OPENAQ_API_BASE_URL, logger
 import requests
 
 
