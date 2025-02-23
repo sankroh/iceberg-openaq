@@ -16,6 +16,7 @@ CATALOG_CONFIG = {
     "warehouse": str(WAREHOUSE_DIR),
 }
 
+
 # Logging configuration
 def configure_logging():
     logging.basicConfig(
@@ -23,6 +24,8 @@ def configure_logging():
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
             logging.StreamHandler(),
-            logging.FileHandler(PROJECT_DIR / "openaq-iceberg.log")
-        ]
+            logging.FileHandler(PROJECT_DIR / "openaq-iceberg.log"),
+        ],
     )
+    logger = logging.getLogger()
+    return logger

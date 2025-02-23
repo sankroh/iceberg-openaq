@@ -1,5 +1,4 @@
-import logging
-
+from openaq_client import fetch_locations, fetch_measurements
 from iceberg import (
     setup_iceberg_catalog,
     create_measurements_table,
@@ -7,13 +6,11 @@ from iceberg import (
     write_locations,
     write_measurements,
 )
-from openaq_client import fetch_locations, fetch_measurements
+
+from config import configure_logging
 
 # Set up logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger("openaq-to-iceberg")
+logger = configure_logging()
 
 
 def main():
