@@ -1,6 +1,6 @@
 # iceberg-openaq
-Create an iceberg catalog for OpenAQ data.
 
+Create an iceberg catalog for OpenAQ data.
 
 # Setup Instructions for OpenAQ to Iceberg Pipeline
 
@@ -8,14 +8,15 @@ Create an iceberg catalog for OpenAQ data.
 
 - Python 3.8+
 - Docker (for running the Iceberg REST catalog)
-- pip packages: `requests`, `pandas`, `pyarrow`, `pyiceberg`
+- uv
 
 ## Installation
 
 1. Install required Python packages:
 
 ```bash
-pip install requests pandas pyarrow pyiceberg
+uv venv
+uv sync
 ```
 
 2. Run the Iceberg REST catalog service using Docker:
