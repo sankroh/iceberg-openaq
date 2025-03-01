@@ -36,9 +36,8 @@ def setup_iceberg_catalog() -> Catalog:
     catalog = load_catalog("rest-catalog", **CATALOG_CONFIG)
 
     # Create the namespace if it doesn't exist
-    if "openaq" not in catalog.list_namespaces():
-        catalog.create_namespace("openaq")
-        logger.info("Created 'openaq' namespace in Iceberg catalog")
+    catalog.create_namespace_if_not_exists("openaq")
+    logger.info("Verified 'openaq' namespace is in Iceberg catalog")
 
     return catalog
 
@@ -170,7 +169,9 @@ def write_to_iceberg(df: pd.DataFrame, table_identifier: str, catalog: Catalog) 
     logger.info(f"Successfully wrote {len(df)} records to {table_identifier}")
 
 
-def write_measurements(measurements_data: List[Dict[str, Any]], catalog: Catalog) -> None:
+def write_measurements(
+    measurements_data: List[Dict[str, Any]], catalog: Catalog
+) -> None:
     """
     Transform and write measurements data to Iceberg.
 
