@@ -7,7 +7,7 @@ Create an iceberg catalog for OpenAQ data.
 ## Prerequisites
 
 - Python 3.8+
-- Docker (for running the Iceberg REST catalog)
+- Docker/Podman (for running the Iceberg REST catalog)
 - uv
 
 ## Installation
@@ -22,11 +22,7 @@ uv sync
 2. Run the Iceberg REST catalog service using Docker:
 
 ```bash
-docker run -p 8181:8181 \
-  -e CATALOG_WAREHOUSE=/tmp/warehouse \
-  -e CATALOG_IO__IMPL=org.apache.iceberg.io.FileIO \
-  -e CATALOG_URI=http://localhost:8181 \
-  tabulario/iceberg-rest:0.6.0
+podman run -p 8181:8181 tabulario/iceberg-rest:1.6.0
 ```
 
 ## Project Structure
