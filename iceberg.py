@@ -1,8 +1,9 @@
 import os
 from pathlib import Path
+import pandas as pd
 import pyarrow as pa
 import pyarrow.dataset as ds
-from pyiceberg.catalog import load_catalog
+from pyiceberg.catalog import load_catalog, Catalog
 from pyiceberg.schema import Schema
 from pyiceberg.types import (
     NestedField,
@@ -12,6 +13,7 @@ from pyiceberg.types import (
     TimestampType,
 )
 import pyiceberg.transforms as transforms
+from typing import List, Dict, Any
 
 from config import CATALOG_CONFIG, configure_logging
 from transform import transform_measurements, transform_locations
@@ -20,7 +22,7 @@ from transform import transform_measurements, transform_locations
 logger = configure_logging()
 
 
-def setup_iceberg_catalog():
+def setup_iceberg_catalog() -> Catalog:
     """
     Set up the Iceberg catalog and create necessary namespaces.
 
@@ -41,7 +43,7 @@ def setup_iceberg_catalog():
     return catalog
 
 
-def create_measurements_table(catalog):
+def create_measurements_table(catalog: Catalog) -> None:
     """
     Create or replace the measurements table in the Iceberg catalog.
 
@@ -89,7 +91,7 @@ def create_measurements_table(catalog):
     logger.info(f"Created table {table_identifier}")
 
 
-def create_locations_table(catalog):
+def create_locations_table(catalog: Catalog) -> None:
     """
     Create or replace the locations table in the Iceberg catalog.
 
@@ -134,7 +136,7 @@ def create_locations_table(catalog):
     logger.info(f"Created table {table_identifier}")
 
 
-def write_to_iceberg(df, table_identifier, catalog):
+def write_to_iceberg(df: pd.DataFrame, table_identifier: str, catalog: Catalog) -> None:
     """
     Write a DataFrame to an Iceberg table.
 
@@ -168,7 +170,7 @@ def write_to_iceberg(df, table_identifier, catalog):
     logger.info(f"Successfully wrote {len(df)} records to {table_identifier}")
 
 
-def write_measurements(measurements_data, catalog):
+def write_measurements(measurements_data: List[Dict[str, Any]], catalog: Catalog) -> None:
     """
     Transform and write measurements data to Iceberg.
 
@@ -180,7 +182,7 @@ def write_measurements(measurements_data, catalog):
     write_to_iceberg(df, "openaq.measurements", catalog)
 
 
-def write_locations(locations_data, catalog):
+def write_locations(locations_data: List[Dict[str, Any]], catalog: Catalog) -> None:
     """
     Transform and write locations data to Iceberg.
 
