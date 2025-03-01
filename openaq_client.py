@@ -1,5 +1,8 @@
-from config import OPENAQ_API_BASE_URL, logger
+from config import OPENAQ_API_BASE_URL, configure_logging
 import requests
+
+# Set up logging
+logger = configure_logging()
 
 
 def fetch_openaq_data(endpoint, params=None, max_pages=5):

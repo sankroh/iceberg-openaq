@@ -13,8 +13,11 @@ from pyiceberg.types import (
 )
 import pyiceberg.transforms as transforms
 
-from config import CATALOG_CONFIG, logger
+from config import CATALOG_CONFIG, configure_logging
 from transform import transform_measurements, transform_locations
+
+# Set up logging
+logger = configure_logging()
 
 
 def setup_iceberg_catalog():
